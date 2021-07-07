@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './StartBtn.module.css';
+import styles from './GeneralBtn.module.css';
 
 function StartBtn(props) {
     return (
         <div className={styles.startBtn} onClick={props.clickStart}>
-            START
+            {props.text}
         </div>
     );
 }

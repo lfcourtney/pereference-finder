@@ -3,7 +3,7 @@ import styles from './Homepage.module.css';
 import {motion} from 'framer-motion';
 import {pageTransition} from '../../Data/pageTransition';
 import EntryBox from '../../Components/EntryBox/EntryBox';
-import StartBtn from '../../Components/StartBtn/StartBtn';
+import GeneralBtn from '../../Components/GeneralBtn/GeneralBtn';
 import {useAuth} from '../../Data/AuthContext';
 import {useHistory} from 'react-router-dom';
 
@@ -39,7 +39,7 @@ function Homepage(props) {
         <p className={styles.openingText}>Type in a list of things separated by a line break or comma. Press submit to enter a quiz where by process of elimination, we will determine what your favourites are in order.</p>
         <EntryBox />
         { warning && <p className={styles.warningText}>{warning}</p>}
-        <StartBtn clickStart={clickStart} />
+        <GeneralBtn text='START' clickStart={clickStart} />
         </div>
         </motion.div>
     );
