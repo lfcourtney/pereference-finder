@@ -1,15 +1,10 @@
 .flexSection{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: -1;
-    min-height: 500px;
+    min-height: 92vh;
+    flex-direction: column;
+    padding: 44px 0;
 }
 .infoText{
     text-align: center;
@@ -18,7 +13,7 @@
 }
 .card{
     border: 1px solid black;
-    padding: 20px 0 40px 0;
+    padding-bottom: 25px;
     text-align: center;
 }
 .card > *{
@@ -52,4 +47,15 @@
 .question{
     font-size: 3rem;
     height: 5.5rem;
+}
+.backBtn{
+    margin: 44px auto 0 auto;
+    padding: 15px 0;
+    text-align: center;
+    background-color: #04AA6B;
+    cursor: pointer;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    width: 100px;
 }

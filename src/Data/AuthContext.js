@@ -14,6 +14,8 @@ export function AuthProvider({children}){
     const [qNum, setQNum] = useLocalStorage('qNum',1);
 
     const [score, setScore] = useLocalStorage('score',[]);
+    //Keep track of score for the back btn
+    const [scoreTrack, setScoreTrack] = useLocalStorage('scoreTrack', []);
 
     //Take an array of items and create a new Array so that items can be individually compared against each other
     function prepareCompareArray(array){
@@ -58,8 +60,17 @@ export function AuthProvider({children}){
         if(qNum <= entries.length){
         const target = entries[qNum - 1][choice];
         let targetScore = score.find(data => data.data === target);
+        setScoreTrack(prev => [...prev, targetScore.data]);
         targetScore.score += 1;
         }
+    }
+
+    //User has pressed the back btn
+    function goBack(){
+        let deMerit = scoreTrack[scoreTrack.length - 1];
+        let findScore = score.find(data => data.data === deMerit);
+        findScore.score -= 1;
+        setScoreTrack(prev => prev.slice(0, -1));
     }
 
     //See if we need to ask more questions because options have equal scores
@@ -96,7 +107,14 @@ export function AuthProvider({children}){
         setEntries(null);
         setQNum(1);
         setScore([]);
+        setScoreTrack([]);
         setCanSeeAnswers(false);
+    }
+
+    //Prepare score so that entries are listed in order
+    function orderScore(){
+        let orderScore = score.sort((a, b) => (a.score < b.score) ? 1 : -1);
+        return orderScore;
     }
 
     const value = {
@@ -113,7 +131,9 @@ export function AuthProvider({children}){
         resetSession,
         detectEquals,
         setCanSeeAnswers,
-        canSeeAnswers
+        canSeeAnswers,
+        orderScore,
+        goBack
     };
 
     return (
