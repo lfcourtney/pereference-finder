@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './Components/Header/Header';
+import {Switch, Route, useLocation, Redirect} from 'react-router-dom';
+import Homepage from './Containers/Homepage/Homepage';
+import About from './Containers/About/About';
+import {AnimatePresence} from 'framer-motion';
+import Quiz from './Containers/Quiz/Quiz';
+import {useAuth} from './Data/AuthContext';
 
 function App() {
+  const location = useLocation();
+
+  const {canStartQuiz, canSeeAnswers} = useAuth();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <Header />
+    <AnimatePresence exitBeforeEnter>
+    <Switch location={location} key={location.pathname}>
+    <Route path="/" exact component={Homepage}></Route>
+    <Route path="/about" component={About}></Route>
+    {canStartQuiz ? <Route path="/quiz" component={Quiz}></Route> : <Redirect from="/quiz" to="/" />}
+    {canSeeAnswers ? <Route path="/answers"></Route> : <Redirect from="/answers" to="/quiz" />}
+    <Route path='*' component={Homepage}></Route>
+    </Switch>
+    </AnimatePresence>
+    </>
   );
 }
 

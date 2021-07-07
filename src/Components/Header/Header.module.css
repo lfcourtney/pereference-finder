@@ -1,0 +1,27 @@
+.navBar{
+    background-color: #04AA6B;
+    color: white;
+    font-weight: bold;
+    padding: 20px 10px;
+    font-size: 1.5rem;
+}
+.navBar p{
+    display: inline-block;
+}
+.navBarPF{
+    cursor: pointer;
+}
+.navBarOptions{
+    float: right;
+}
+.navBarOptions p{
+    cursor: pointer;
+}
+.aboutLink{
+    transition: all 0.5s ease-in-out;
+}
+@media(max-width: 349px){
+    .navBarPF{
+        width: 50px;
+    }
+}

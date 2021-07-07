@@ -1,0 +1,36 @@
+.flexAbout{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    padding-top: 100px;
+    z-index: -1;
+}
+
+.aboutText1{
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 20px 0 0 0;
+}
+.aboutText2{
+    text-align: center;
+    font-size: 1.25rem;
+    margin-bottom: 40px;
+}
+.footer{
+    background-color: #f2f2f2;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 1.25rem;
+}
+
+
+@media(max-width: 1024px){
+    .aboutText{
+        font-size: 1rem;
+    }
+}

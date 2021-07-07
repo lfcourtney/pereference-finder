@@ -1,0 +1,20 @@
+.openingText{
+    text-align: center;
+    font-size: 1.25rem;
+    margin-top: 44px;
+}
+.warningText{
+    text-align: center;
+    font-size: 1.25rem;
+    color: red;
+    margin-top: 44px;
+}
+
+@media(max-width: 1024px){
+    .openingText{
+        font-size: 1rem;
+    }
+    .warningText{
+        font-size: 1rem;
+    }
+}

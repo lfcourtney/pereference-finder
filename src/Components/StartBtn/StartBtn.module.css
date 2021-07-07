@@ -1,0 +1,14 @@
+.startBtn{
+    margin: 44px auto 44px auto;
+    width: 100px;
+    padding: 15px 0;
+    text-align: center;
+    background-color: #04AA6B;
+    cursor: pointer;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.startBtn:hover{
+    background-color: #059862;
+}
