@@ -25,6 +25,15 @@ function Homepage(props) {
             setWarning('Warning. You must have more than one entry.');
             return;
         }
+        let isEmptyItem = false;
+        words.forEach(word => {
+            let match = word.match(/\s*/) ? word.match(/\s*/) : '';
+            if(match[0]=== word) isEmptyItem = true;
+        });
+        if(isEmptyItem){
+            setWarning('Warning. No empty items are allowed.');
+            return;
+        } 
         history.push('/quiz');
         if(!canStartQuiz){
             prepareEntries(words);
