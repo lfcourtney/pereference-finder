@@ -25,7 +25,7 @@ function Answers(props) {
         transition={{duration: 0.5}}>
         <section className={styles.center}>
             <div className="container">
-            <p className={styles.rankings}>Your rankings: from worst to best.</p>
+            <p className={styles.rankings}>Your rankings: from best to worst.</p>
             <div className={styles.card}>
                 {orderScore().map((score, index) => (
                     <p key={index}>{index+1+'. '+score.data}</p>
