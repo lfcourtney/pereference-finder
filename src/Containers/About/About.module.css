@@ -30,7 +30,7 @@
 
 
 @media(max-width: 1024px){
-    .aboutText{
+    [class*="aboutText"]{
         font-size: 1rem;
     }
 }

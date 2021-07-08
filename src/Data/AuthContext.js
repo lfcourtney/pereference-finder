@@ -62,6 +62,7 @@ export function AuthProvider({children}){
         let targetScore = score.find(data => data.data === target);
         setScoreTrack(prev => [...prev, targetScore.data]);
         targetScore.score += 1;
+        console.log(score);
         }
     }
 
