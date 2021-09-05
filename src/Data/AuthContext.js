@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import useLocalStorage from './useLocalStorage';
+import fibonacciGenerator from '../Utils/fibonacciGenerator';
 
 const AuthContext = React.createContext();
 
@@ -12,7 +13,8 @@ export function AuthProvider({children}){
     const [entryBox, setEntryBox] = useLocalStorage('entryBox', '');
     const [entries, setEntries] = useLocalStorage('entries',null);
     const [qNum, setQNum] = useLocalStorage('qNum',1);
-
+    const [numOfQuestions, setNumOfQuestions] = useLocalStorage('numOfQ', 0);
+    const [estimatedQuestions, setEstimatedQuestions] = useLocalStorage('estimatedQ', 0);
     const [score, setScore] = useLocalStorage('score',[]);
     //Keep track of score for the back btn
     const [scoreTrack, setScoreTrack] = useLocalStorage('scoreTrack', []);
@@ -27,11 +29,13 @@ export function AuthProvider({children}){
         }
         return answers;
     }
-
+    
     const prepareEntries = data => {
         const preparedData = data.map(entry => entry.trim());
         let answers = prepareCompareArray(preparedData);
-
+        
+        setNumOfQuestions(preparedData.length);
+        setEstimatedQuestions(fibonacciGenerator(preparedData.length));
         answers = randomizeArray(answers);
         
         //Fill out score Array
@@ -133,7 +137,9 @@ export function AuthProvider({children}){
         setCanSeeAnswers,
         canSeeAnswers,
         orderScore,
-        goBack
+        goBack,
+        numOfQuestions,
+        estimatedQuestions
     };
 
     return (

@@ -1,9 +1,11 @@
 .navBar{
+    position: relative;
     background-color: #04AA6B;
     color: white;
     font-weight: bold;
     padding: 20px 10px;
     font-size: 1.5rem;
+    z-index: 100;
 }
 .navBar p{
     display: inline-block;

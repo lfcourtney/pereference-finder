@@ -38,6 +38,10 @@
     background-color: #04AA6B;
     color: white;
 }
+.green.initialBtn{
+    width: 100px;
+    margin-top: 1.5rem;
+}
 .green:hover{
     background-color: #059862;
 }
@@ -58,4 +62,31 @@
     border-radius: 10px;
     font-weight: bold;
     width: 100px;
+}
+.initialScreen{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    z-index: -1;
+    justify-content: center;
+    align-items: center;
+}
+.initialText{
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 20px 0 0 0;
+}
+.enteredTitle{
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: capitalize;
+    text-align: center;
+}
+.enteredSub{
+    font-size: 1.25rem;
+    text-align: center;
 }

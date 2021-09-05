@@ -1,5 +1,5 @@
-import React, {useState, useRef} from 'react';
-import {motion, useAnimation} from 'framer-motion';
+import React, {useRef, useState} from 'react';
+import {motion, useAnimation } from 'framer-motion';
 import {pageTransition} from '../../Data/pageTransition';
 import styles from './Quiz.module.css';
 import {useAuth} from '../../Data/AuthContext';
@@ -13,7 +13,9 @@ function Quiz(props) {
 
     const canNewQ = useRef(true);
 
-    const {entries, qNum, setQNum, updateScore, detectEquals, goBack} = useAuth();
+    const {entries, qNum, setQNum, updateScore, detectEquals, goBack, numOfQuestions, estimatedQuestions} = useAuth();
+
+    const [selectedNewQuestion, setSelectedNewQuestion] = useState(false);
 
     function newOrBack(dir){
         canNewQ.current = false;
@@ -34,6 +36,7 @@ function Quiz(props) {
     }
 
     const newQ = (choice) => {
+    setSelectedNewQuestion(true);
     if(canNewQ.current){
         newOrBack('FORWARD');
         updateScore(choice);
@@ -47,15 +50,39 @@ function Quiz(props) {
 
     const clickBack = () => {
         if(canNewQ.current){
+            setSelectedNewQuestion(true);
             newOrBack('BACKWARD');
             goBack();
         }
     }
 
+    const removeInitialScreen = () => {
+        cardControl.start({
+            opacity: [1, 0, 1],
+            transition: {duration: 1, ease: 'easeInOut'}
+        });
+        setTimeout(() => {
+            setSelectedNewQuestion(true);
+        }, 500);
+        
+    };
+
     return (
         <motion.div initial="out" animate="in" exit="out" variants={pageTransition}
         transition={{duration: 0.5}}>
-            <motion.section animate={cardControl} className={styles.flexSection}>
+        <motion.section animate={cardControl}>
+            {!selectedNewQuestion && qNum === 1 && numOfQuestions > 2 ? 
+            <motion.div className={styles.initialScreen}>
+                <div className="container">
+                    <p className={styles.enteredTitle}>You entered:</p>
+                    <p className={styles.enteredSub}>{numOfQuestions} options</p>
+                    <p className={styles.enteredTitle}>Expect an estimated:</p>
+                    <p className={styles.enteredSub}>{estimatedQuestions} questions</p>
+                    <div className={`${styles.btn} ${styles.green} ${styles.initialBtn}`}
+                    onClick={removeInitialScreen}>Ok</div>
+                </div>
+            </motion.div> : 
+            <motion.section className={styles.flexSection}>
             <p className={styles.question}>Q. {qNum}</p>
             <p className={styles.infoText}>Which one is better?</p>
             <div className="container">
@@ -69,6 +96,7 @@ function Quiz(props) {
                 </div>
                 { qNum > 1 && <div className={styles.backBtn} onClick={clickBack}>BACK</div>}
             </div>
+            </motion.section>}
             </motion.section>
         </motion.div>
     );
