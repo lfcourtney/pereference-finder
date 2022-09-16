@@ -11,7 +11,7 @@ function App() {
   const location = useLocation();
 
   const {canStartQuiz, canSeeAnswers} = useAuth();
-
+  //PREPARE TO MAKE A HUGE CHANGE: change the algorithm to one much more efficient, namely the 'Merge Insertion Sort'.
   return (
     <>
     <Header />
