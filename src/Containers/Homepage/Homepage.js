@@ -1,56 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styles from './Homepage.module.css';
-import {motion, useAnimation} from 'framer-motion';
+import {motion} from 'framer-motion';
 import {pageTransition} from '../../Data/pageTransition';
 import EntryBox from '../../Components/EntryBox/EntryBox';
 import GeneralBtn from '../../Components/GeneralBtn/GeneralBtn';
-import {useAuth} from '../../Data/AuthContext';
-import {useHistory} from 'react-router-dom';
-import {sameWordChecker} from '../../Utils/sameWordChecker';
+import useHomePageWarning from './useHomepageWarning';
 
 function Homepage(props) {
 
-    const control = useAnimation();
-
-    const history = useHistory();
-
-    const [warning, setWarning] = useState(null);
-
-    const {entryBox, setCanStartQuiz, prepareEntries, canStartQuiz} = useAuth();
-
-    const clickStart = () => {
-        if(!entryBox){
-            setWarning('Warning. You can\'t submit an empty form.');
-            control.start({scale: [0.8, 1, 0.8, 1], display: 'block'});
-            return;
-        } 
-        const words = entryBox.split(/[\n,]/);
-        if(words.length < 2){
-            setWarning('Warning. You must have more than one entry.');
-            control.start({scale: [0.8, 1, 0.8, 1], display: 'block'});
-            return;
-        }
-        let isEmptyItem = false;
-        words.forEach(word => {
-            let match = word.match(/\s*/) ? word.match(/\s*/) : '';
-            if(match[0]=== word) isEmptyItem = true;
-        });
-        if(isEmptyItem){
-            setWarning('Warning. No empty items are allowed.');
-            control.start({scale: [0.8, 1, 0.8, 1], display: 'block'});
-            return;
-        }
-        if(sameWordChecker(words)){
-            setWarning('Warning. No duplicate items are allowed.');
-            control.start({scale: [0.8, 1, 0.8, 1], display: 'block'});
-            return;
-        }
-        history.push('/quiz');
-        if(!canStartQuiz){
-            prepareEntries(words);
-            setCanStartQuiz(true);
-        }
-    }
+    const [clickStart, warning, control] = useHomePageWarning();
 
     return (
         <motion.div initial="out" animate="in" exit="out" variants={pageTransition}
