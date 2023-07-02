@@ -4,6 +4,7 @@ import {pageTransition} from '../../Data/pageTransition';
 import styles from './Quiz.module.css';
 import {useAuth} from '../../Data/AuthContext';
 import {useHistory} from 'react-router-dom';
+import InitialScreen from './InitialScreen.js';
 
 function Quiz(props) {
 
@@ -56,32 +57,13 @@ function Quiz(props) {
         }
     }
 
-    const removeInitialScreen = () => {
-        cardControl.start({
-            opacity: [1, 0, 1],
-            transition: {duration: 1, ease: 'easeInOut'}
-        });
-        setTimeout(() => {
-            setSelectedNewQuestion(true);
-        }, 500);
-        
-    };
-
     return (
         <motion.div initial="out" animate="in" exit="out" variants={pageTransition}
         transition={{duration: 0.5}}>
         <motion.section animate={cardControl}>
             {!selectedNewQuestion && qNum === 1 && numOfQuestions > 2 ? 
-            <motion.div className={styles.initialScreen}>
-                <div className="container">
-                    <p className={styles.enteredTitle}>You entered:</p>
-                    <p className={styles.enteredSub}>{numOfQuestions} options</p>
-                    <p className={styles.enteredTitle}>Expect an estimated:</p>
-                    <p className={styles.enteredSub}>{estimatedQuestions} questions</p>
-                    <div className={`${styles.btn} ${styles.green} ${styles.initialBtn}`}
-                    onClick={removeInitialScreen}>Ok</div>
-                </div>
-            </motion.div> : 
+            <InitialScreen cardControl={cardControl} estimatedQuestions={estimatedQuestions}
+            setSelectedNewQuestion={setSelectedNewQuestion} numOfQuestions={numOfQuestions} /> : 
             <motion.section className={styles.flexSection}>
             <p className={styles.question}>Q. {qNum}</p>
             <p className={styles.infoText}>Which one is better?</p>

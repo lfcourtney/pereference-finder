@@ -64,16 +64,12 @@
     width: 100px;
 }
 .initialScreen{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    z-index: -1;
+    min-height: 92vh;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    padding: 44px 0;
 }
 .initialText{
     text-align: center;
