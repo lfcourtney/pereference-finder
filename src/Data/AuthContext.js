@@ -22,29 +22,40 @@ export function AuthProvider({children}){
     //Take an array of items and create a new Array so that items can be individually compared against each other
     function prepareCompareArray(array){
         let answers = [];
-        for (let i = 0; i < array.length; i++){
-            for(let j = i + 1; j < array.length; j++){
-                answers.push([array[i], array[j]]);
-            }
+        for (let i = 0; i < array.length - 1; i+=2){
+            answers.push([array[i], array[i + 1]]);
         }
+        //See if there is an odd item out, right at the very end
+        if((array.length / 2) > answers.length){
+            answers.push([array[array.length - 1]]);
+        }
+        //console.log(answers);
         return answers;
+    }
+
+    /**
+     * Use preparedData to build scoreState
+     * @param preparedData Array of the original inputs coming straight from the client
+     */
+    function prepareScore(preparedData){
+        //Fill out score Array
+        preparedData.forEach(data => {
+            let obj = {data: data, score: 0};
+            setScore(prev => [...prev, obj]);
+        });
     }
     
     const prepareEntries = data => {
         const preparedData = data.map(entry => entry.trim());
+        prepareScore(preparedData);
+
         let answers = prepareCompareArray(preparedData);
         
         setNumOfQuestions(preparedData.length);
         setEstimatedQuestions(fibonacciGenerator(preparedData.length));
         answers = randomizeArray(answers);
         
-        //Fill out score Array
-        preparedData.forEach(data => {
-            let obj = {data: data, score: 0};
-            setScore(prev => [...prev, obj]);
-        });
-
-        setEntries(answers);
+        setEntries(answers); //Entries is the raw input information. It does not contain the score for each input. That is what the score state is for.
     }
 
     function randomizeArray(arr){
@@ -59,7 +70,10 @@ export function AuthProvider({children}){
         return randomizeArray;
     }
 
-    //Update Score
+    /**
+     * 
+     * @param choice This value comes straight from the UI depending on which option, either 1 or 2, the client selected in the quiz
+     */
     function updateScore(choice){
         if(qNum <= entries.length){
         const target = entries[qNum - 1][choice];
