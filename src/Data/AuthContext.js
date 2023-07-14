@@ -102,8 +102,8 @@ export function AuthProvider({children}){
     }
 
 
-    const [canStartQuiz, setCanStartQuiz] = useLocalStorage('canStart', false);
-    const [canSeeAnswers, setCanSeeAnswers] = useLocalStorage('canSeeAnswers', false);
+    const [canStartQuiz, setCanStartQuiz] = useLocalStorage('canStart', false); //Used for Route Security, so that clients cannot access quiz until they are properly authorised to
+    const [canSeeAnswers, setCanSeeAnswers] = useLocalStorage('canSeeAnswers', false); //Used for Route Security, so that clients cannot access answers until they are properly authorised to
 
     //Reset Session So That Progress Is No Longer Saved
     function resetSession(){

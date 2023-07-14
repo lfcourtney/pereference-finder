@@ -16,7 +16,7 @@ function Quiz(props) {
 
     const {entries, qNum, setQNum, updateScore, detectEquals, goBack, numOfQuestions, estimatedQuestions} = useAuth();
 
-    const [selectedNewQuestion, setSelectedNewQuestion] = useState(false);
+    const [selectedNewQuestion, setSelectedNewQuestion] = useState(false); //Main use is to remember that the initial screen should not be shown
 
     function newOrBack(dir){
         canNewQ.current = false;
@@ -57,11 +57,16 @@ function Quiz(props) {
         }
     }
 
+    //Ternary operator is needed so that page can transition out safely without an out of bounds exception
+    const safelyRenderQuestion = questionPart => {
+        return qNum <= entries.length ? entries[qNum - 1][questionPart] : null;
+    }
+
     return (
         <motion.div initial="out" animate="in" exit="out" variants={pageTransition}
         transition={{duration: 0.5}}>
         <motion.section animate={cardControl}>
-            {!selectedNewQuestion && qNum === 1 && numOfQuestions > 2 ? 
+            {!selectedNewQuestion && qNum === 1 && numOfQuestions > 2 ?
             <InitialScreen cardControl={cardControl} estimatedQuestions={estimatedQuestions}
             setSelectedNewQuestion={setSelectedNewQuestion} numOfQuestions={numOfQuestions} /> : 
             <motion.section className={styles.flexSection}>
@@ -69,10 +74,10 @@ function Quiz(props) {
             <p className={styles.infoText}>Which one is better?</p>
             <div className="container">
                 <div className={styles.card} >
-                    <p className={styles.options} >1. {qNum <= entries.length ? entries[qNum - 1][0] : 'as'}</p>
+                    <p className={styles.options} >1. {safelyRenderQuestion(0)}</p>
                     <div className={`${styles.btn} ${styles.blue}`}
                     onClick={() => newQ(0)}>Choose One</div>
-                    <p className={styles.options}>2. {qNum <= entries.length ? entries[qNum - 1][1] : 'as'}</p>
+                    <p className={styles.options}>2. {safelyRenderQuestion(1)}</p>
                     <div className={`${styles.btn} ${styles.green}`}
                     onClick={() => newQ(1)}>Choose Two</div>
                 </div>
