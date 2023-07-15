@@ -29,7 +29,7 @@ export function AuthProvider({children}){
         if((array.length / 2) > answers.length){
             answers.push([array[array.length - 1]]);
         }
-        //console.log(answers);
+        console.log(answers);
         return answers;
     }
 
@@ -44,6 +44,17 @@ export function AuthProvider({children}){
             setScore(prev => [...prev, obj]);
         });
     }
+
+    /**
+     * The number of questions is derived from the 'entries' sate. But this array can contain an odd entry, so the number of questions, as determined by this function, depends on whether this odd entry exists or not since this odd entry can never constitute a comparison between two things by itself
+     * @param preparedDataLength The length property of an array from the 'prepareCompareArray' function
+     */
+    function workOutNumberOfQuestions(preparedDataLength){
+        let finalValue = preparedDataLength;
+        //Odd numbers suggest that there are no entries left on their own, so only increment if number is even
+        if(preparedDataLength % 2 === 0) finalValue--;
+        setNumOfQuestions(finalValue);
+    }
     
     const prepareEntries = data => {
         const preparedData = data.map(entry => entry.trim());
@@ -51,7 +62,8 @@ export function AuthProvider({children}){
 
         let answers = prepareCompareArray(preparedData);
         
-        setNumOfQuestions(preparedData.length);
+        workOutNumberOfQuestions(preparedData.length);
+        //TODO: Change this based on new algorithm in use
         setEstimatedQuestions(fibonacciGenerator(preparedData.length));
         answers = randomizeArray(answers);
         
@@ -94,25 +106,33 @@ export function AuthProvider({children}){
     //See if we need to ask more questions because options have equal scores
     function detectEquals(){
         let equalNames = [];
-        score.forEach((data, index) => {
-            let scoreP = data.score;
-            for(let i = index + 1; i < score.length; i++){
-                let thisScore = score[i];
-                if(thisScore.score === scoreP){
-                    if(equalNames.indexOf(data.data) === -1) equalNames.push(data.data);
-                    if(equalNames.indexOf(thisScore.data) === -1) equalNames.push(thisScore.data);
-                }
-            }
-        });
-        if(equalNames.length > 0){
-            let newAnswers = prepareCompareArray(equalNames);
-            newAnswers = randomizeArray(newAnswers);
-            newAnswers = entries.concat(newAnswers);
-            setEntries(newAnswers);
-            return true;
-        }
+        // score.forEach((data, index) => {
+        //     let scoreP = data.score;
+        //     for(let i = index + 1; i < score.length; i++){
+        //         let thisScore = score[i];
+        //         if(thisScore.score === scoreP){
+        //             if(equalNames.indexOf(data.data) === -1) equalNames.push(data.data);
+        //             if(equalNames.indexOf(thisScore.data) === -1) equalNames.push(thisScore.data);
+        //         }
+        //     }
+        // });
+        // if(equalNames.length > 0){
+        //     let newAnswers = prepareCompareArray(equalNames);
+        //     newAnswers = randomizeArray(newAnswers);
+        //     newAnswers = entries.concat(newAnswers);
+        //     setEntries(newAnswers);
+        //     return true;
+        // }
         setCanSeeAnswers(true);
         return false;
+    }
+
+    /**
+     * @param array Array formatted from the 'prepareCompareArray' function.
+     * Checks the current 'score' state for duplicate scores and returns a data structure that records all of the entries that have duplicate scores
+     */
+    function refitCompareArray(array){
+
     }
 
 
