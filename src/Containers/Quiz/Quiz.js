@@ -14,7 +14,7 @@ function Quiz(props) {
 
     const canNewQ = useRef(true);
 
-    const {entries, qNum, setQNum, updateScore, detectEquals, goBack, numOfQuestions, estimatedQuestions} = useAuth();
+    const {entries, qNum, setQNum, updateScore, detectEquals, goBack, numOfOptions, estimatedQuestions} = useAuth();
 
     const [selectedNewQuestion, setSelectedNewQuestion] = useState(false); //Main use is to remember that the initial screen should not be shown
 
@@ -66,9 +66,9 @@ function Quiz(props) {
         <motion.div initial="out" animate="in" exit="out" variants={pageTransition}
         transition={{duration: 0.5}}>
         <motion.section animate={cardControl}>
-            {!selectedNewQuestion && qNum === 1 && numOfQuestions > 2 ?
+            {!selectedNewQuestion && qNum === 1 && numOfOptions > 2 ?
             <InitialScreen cardControl={cardControl} estimatedQuestions={estimatedQuestions}
-            setSelectedNewQuestion={setSelectedNewQuestion} numOfQuestions={numOfQuestions} /> : 
+            setSelectedNewQuestion={setSelectedNewQuestion} numOfOptions={numOfOptions} /> : 
             <motion.section className={styles.flexSection}>
             <p className={styles.question}>Q. {qNum}</p>
             <p className={styles.infoText}>Which one is better?</p>

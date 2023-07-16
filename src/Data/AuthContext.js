@@ -13,7 +13,7 @@ export function AuthProvider({children}){
     const [entryBox, setEntryBox] = useLocalStorage('entryBox', '');
     const [entries, setEntries] = useLocalStorage('entries',null);
     const [qNum, setQNum] = useLocalStorage('qNum',1);
-    const [numOfQuestions, setNumOfQuestions] = useLocalStorage('numOfQ', 0);
+    const [numOfOptions, setNumOfOptions] = useLocalStorage('numOfOptions', 0);
     const [estimatedQuestions, setEstimatedQuestions] = useLocalStorage('estimatedQ', 0);
     const [score, setScore] = useLocalStorage('score',[]);
     //Keep track of score for the back btn
@@ -44,27 +44,17 @@ export function AuthProvider({children}){
             setScore(prev => [...prev, obj]);
         });
     }
-
-    /**
-     * The number of questions is derived from the 'entries' sate. But this array can contain an odd entry, so the number of questions, as determined by this function, depends on whether this odd entry exists or not since this odd entry can never constitute a comparison between two things by itself
-     * @param preparedDataLength The length property of an array from the 'prepareCompareArray' function
-     */
-    function workOutNumberOfQuestions(preparedDataLength){
-        let finalValue = preparedDataLength;
-        //Odd numbers suggest that there are no entries left on their own, so only increment if number is even
-        if(preparedDataLength % 2 === 0) finalValue--;
-        setNumOfQuestions(finalValue);
-    }
     
     const prepareEntries = data => {
         const preparedData = data.map(entry => entry.trim());
         prepareScore(preparedData);
 
+        setNumOfOptions(preparedData.length);
+
         let answers = prepareCompareArray(preparedData);
         
-        workOutNumberOfQuestions(preparedData.length);
-        //TODO: Change this based on new algorithm in use
-        setEstimatedQuestions(fibonacciGenerator(preparedData.length));
+        //TODO: Change 'setEstimatedQuestions' based on new algorithm in use
+        //setEstimatedQuestions(fibonacciGenerator(preparedData.length));
         answers = randomizeArray(answers);
         
         setEntries(answers); //Entries is the raw input information. It does not contain the score for each input. That is what the score state is for.
@@ -92,7 +82,6 @@ export function AuthProvider({children}){
         let targetScore = score.find(data => data.data === target);
         setScoreTrack(prev => [...prev, targetScore.data]);
         targetScore.score += 1;
-        console.log(helpRefitCompareArray()); //GET RID
         }
     }
 
@@ -106,7 +95,11 @@ export function AuthProvider({children}){
 
     //See if we need to ask more questions because options have equal scores
     function detectEquals(){
-        let equalNames = [];
+        const [returnArray, returnBoolean] = helpRefitCompareArray();
+        if(!returnBoolean){
+            //returnArray.forEach(returnArr)
+            return true;
+        }
         // score.forEach((data, index) => {
         //     let scoreP = data.score;
         //     for(let i = index + 1; i < score.length; i++){
@@ -131,9 +124,11 @@ export function AuthProvider({children}){
     /**
      *
      * Checks the current 'score' state for duplicate scores and returns a data structure that records all of the entries that have duplicate scores
+     * @returns Array. First item is the array that is built. Second item is a Boolean. Will be true or false based on whether each item has a unique score by this point or not. In other words, will be true or false based on whether the quiz should continue or not.
      */
     function helpRefitCompareArray(){
         const returnArray = [];
+        let returnBoolean = true; //Will be true if quiz can end.
         score.forEach(sd => {
             let item; //Two properties 'value' and 'items'. 'value' is a unique value. 'items' is all the data entries that pertain to that unique value. 
             const returnArrayNum = findReturnArrayNumber(returnArray, sd.score, returnArray.length - 1);
@@ -142,9 +137,10 @@ export function AuthProvider({children}){
                 returnArray.push(item);
             }else{
                 returnArray[returnArrayNum].items.push(sd.data);
+                returnBoolean = false;
             }
         });
-        return returnArray;
+        return [returnArray, returnBoolean];
     }
 
     /**
@@ -201,7 +197,7 @@ export function AuthProvider({children}){
         canSeeAnswers,
         orderScore,
         goBack,
-        numOfQuestions,
+        numOfOptions,
         estimatedQuestions
     };
 

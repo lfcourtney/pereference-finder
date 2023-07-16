@@ -2,7 +2,7 @@ import styles from './Quiz.module.css';
 import {motion } from 'framer-motion';
 
 
-function InitialScreen({cardControl, estimatedQuestions, setSelectedNewQuestion, numOfQuestions}){
+function InitialScreen({cardControl, estimatedQuestions, setSelectedNewQuestion, numOfOptions}){
 
     const removeInitialScreen = () => {
         cardControl.start({
@@ -20,7 +20,7 @@ function InitialScreen({cardControl, estimatedQuestions, setSelectedNewQuestion,
         <motion.div className={styles.initialScreen}>
                 <div className="container">
                     <p className={styles.enteredTitle}>You entered:</p>
-                    <p className={styles.enteredSub}>{numOfQuestions} options</p>
+                    <p className={styles.enteredSub}>{numOfOptions} options</p>
                     <p className={styles.enteredTitle}>Expect an estimated:</p>
                     <p className={styles.enteredSub}>{estimatedQuestions} questions</p>
                     <div className={`${styles.btn} ${styles.green} ${styles.initialBtn}`}
