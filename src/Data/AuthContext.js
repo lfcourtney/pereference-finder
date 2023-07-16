@@ -29,7 +29,7 @@ export function AuthProvider({children}){
         if((array.length / 2) > answers.length){
             answers.push([array[array.length - 1]]);
         }
-        console.log(answers);
+        console.log(answers); //GET RID
         return answers;
     }
 
@@ -92,6 +92,7 @@ export function AuthProvider({children}){
         let targetScore = score.find(data => data.data === target);
         setScoreTrack(prev => [...prev, targetScore.data]);
         targetScore.score += 1;
+        console.log(helpRefitCompareArray()); //GET RID
         }
     }
 
@@ -128,11 +129,39 @@ export function AuthProvider({children}){
     }
 
     /**
-     * @param array Array formatted from the 'prepareCompareArray' function.
+     *
      * Checks the current 'score' state for duplicate scores and returns a data structure that records all of the entries that have duplicate scores
      */
-    function refitCompareArray(array){
+    function helpRefitCompareArray(){
+        const returnArray = [];
+        score.forEach(sd => {
+            let item; //Two properties 'value' and 'items'. 'value' is a unique value. 'items' is all the data entries that pertain to that unique value. 
+            const returnArrayNum = findReturnArrayNumber(returnArray, sd.score, returnArray.length - 1);
+            if(returnArrayNum === -1){
+                item = {value: sd.score, items: [sd.data]};
+                returnArray.push(item);
+            }else{
+                returnArray[returnArrayNum].items.push(sd.data);
+            }
+        });
+        return returnArray;
+    }
 
+    /**
+     * Related to the 'helpRefitCompareArray' function. Tries to find the index at which an object related to the provided score exists within the 'returnArray' Array param
+     * @param returnArray From 'helpRefitCompareArray' function. 
+     * @param score Score from the 'returnArray' param that this function is looking to find
+     * @param index Index to return if necessary
+     * @returns {number} -1 if there is no object related to the current score within the array. Otherwise, the actual index will be returned.
+     */
+    function findReturnArrayNumber(returnArray, score, index){
+        if(index < 0){
+            return -1;
+        }
+        if(returnArray[index].value === score){
+            return index;
+        }
+        return findReturnArrayNumber(returnArray, score, index - 1);
     }
 
 
