@@ -29,7 +29,7 @@ export function AuthProvider({children}){
         if((array.length / 2) > answers.length){
             answers.push([array[array.length - 1]]);
         }
-        console.log(answers); //GET RID
+        //console.log(answers); //GET RID
         return answers;
     }
 
@@ -46,7 +46,7 @@ export function AuthProvider({children}){
     }
     
     const prepareEntries = data => {
-        const preparedData = data.map(entry => entry.trim());
+        const preparedData = randomizeArray(data.map(entry => entry.trim()));
         prepareScore(preparedData);
 
         setNumOfOptions(preparedData.length);
@@ -54,8 +54,7 @@ export function AuthProvider({children}){
         let answers = prepareCompareArray(preparedData);
         
         //TODO: Change 'setEstimatedQuestions' based on new algorithm in use
-        //setEstimatedQuestions(fibonacciGenerator(preparedData.length));
-        answers = randomizeArray(answers);
+        setEstimatedQuestions(fibonacciGenerator(preparedData.length));
         
         setEntries(answers); //Entries is the raw input information. It does not contain the score for each input. That is what the score state is for.
     }
@@ -80,6 +79,7 @@ export function AuthProvider({children}){
         if(qNum <= entries.length){
         const target = entries[qNum - 1][choice];
         let targetScore = score.find(data => data.data === target);
+        console.log(score);
         setScoreTrack(prev => [...prev, targetScore.data]);
         targetScore.score += 1;
         }
@@ -97,7 +97,13 @@ export function AuthProvider({children}){
     function detectEquals(){
         const [returnArray, returnBoolean] = helpRefitCompareArray();
         if(!returnBoolean){
-            //returnArray.forEach(returnArr)
+            let newEntries = [];
+            returnArray.forEach(returnArr => {
+                newEntries = addToNewEntries(newEntries, returnArr);
+            });
+            console.log(newEntries);
+            newEntries = entries.concat(newEntries);
+            setEntries(newEntries);
             return true;
         }
         // score.forEach((data, index) => {
@@ -119,6 +125,24 @@ export function AuthProvider({children}){
         // }
         setCanSeeAnswers(true);
         return false;
+    }
+
+    /**
+     * Tied to the 'detectEquals' function. Creates the Array that will add to the entries state.
+     * @param newEntries Straight from the 'detectEquals' function
+     * @param returnArr Straight from the 'detectEquals' function
+     * @returns new newEntries value
+     */
+    function addToNewEntries(newEntries, returnArr){
+        if(returnArr.items.length > 1){
+            let prepareNewEntries = prepareCompareArray(randomizeArray(returnArr.items));
+            if(returnArr.items.length % 2 !== 0){ //Only an even length can mean that there are no isolated items at the end, so only cut this odd item of at the end if the length is odd
+                newEntries = newEntries.concat(prepareNewEntries.slice(0, -1));
+            }else{
+                newEntries = newEntries.concat(prepareNewEntries);
+            }
+        }
+        return newEntries;
     }
 
     /**
